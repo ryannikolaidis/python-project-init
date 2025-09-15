@@ -27,20 +27,10 @@ jobs:
 
     - name: Run linting
       run: |
-        uv run ruff check {{ package_name }} tests
-        uv run black --check {{ package_name }} tests
-
-    - name: Run type checking
-      run: uv run mypy {{ package_name }}
+        make check
 
     - name: Run tests
       run: uv run pytest --cov={{ package_name }} --cov-report=xml
-
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        file: ./coverage.xml
-        fail_ci_if_error: true
 
   build:
     runs-on: ubuntu-latest
