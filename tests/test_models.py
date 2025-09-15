@@ -1,0 +1,60 @@
+"""Tests for models module."""
+
+from pathlib import Path
+
+from python_project_init.models import ProjectConfig
+
+
+def test_project_config_creation():
+    """Test ProjectConfig creation."""
+    config = ProjectConfig(
+        project_name="test-project",
+        description="A test project",
+        author_name="Test Author",
+        author_email="test@example.com",
+        python_version="3.12",
+        package_name="test_project",
+        entry_point=True,
+        github_username="testuser",
+        target_directory=Path("/tmp/test-project"),
+    )
+
+    assert config.project_name == "test-project"
+    assert config.description == "A test project"
+    assert config.author_name == "Test Author"
+    assert config.author_email == "test@example.com"
+    assert config.python_version == "3.12"
+    assert config.package_name == "test_project"
+    assert config.entry_point is True
+    assert config.github_username == "testuser"
+    assert config.target_directory == Path("/tmp/test-project")
+
+
+def test_to_template_vars():
+    """Test converting ProjectConfig to template variables."""
+    config = ProjectConfig(
+        project_name="test-project",
+        description="A test project",
+        author_name="Test Author",
+        author_email="test@example.com",
+        python_version="3.12",
+        package_name="test_project",
+        entry_point=False,
+        github_username="testuser",
+        target_directory=Path("/tmp/test-project"),
+    )
+
+    variables = config.to_template_vars()
+
+    expected = {
+        "project_name": "test-project",
+        "description": "A test project",
+        "author_name": "Test Author",
+        "author_email": "test@example.com",
+        "python_version": "3.12",
+        "package_name": "test_project",
+        "entry_point": False,
+        "github_username": "testuser",
+    }
+
+    assert variables == expected

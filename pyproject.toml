@@ -1,0 +1,87 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "python-project-init"
+dynamic = ["version"]
+description = "A CLI tool to initialize Python projects from templates"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12"
+authors = [
+    { name = "Ryan Nikolaidis" },
+]
+keywords = ["python", "template", "cli", "project", "initialization"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "typer>=0.12.0",
+    "jinja2>=3.1.0",
+    "rich>=13.0.0",
+    "pyyaml>=6.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.4.0",
+    "black>=24.0.0",
+    "mypy>=1.8.0",
+    "pre-commit>=3.6.0",
+]
+
+[project.scripts]
+ppi = "python_project_init.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/ryannikolaidis/python-project-init"
+Repository = "https://github.com/ryannikolaidis/python-project-init"
+Issues = "https://github.com/ryannikolaidis/python-project-init/issues"
+
+[tool.hatch.version]
+path = "python_project_init/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["python_project_init"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]
+
+[tool.black]
+line-length = 100
+target-version = ['py312']
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+addopts = "-v --cov=python_project_init --cov-report=term-missing"
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+]

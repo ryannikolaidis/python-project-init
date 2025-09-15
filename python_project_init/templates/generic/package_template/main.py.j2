@@ -1,0 +1,217 @@
+{% if create_api %}"""FastAPI web application for {{ project_name }}."""
+
+from contextlib import asynccontextmanager
+from typing import Dict, Any
+
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+
+
+# Pydantic models for request/response
+class HealthResponse(BaseModel):
+    """Health check response model."""
+    status: str
+    message: str
+    version: str
+
+
+class GreetingRequest(BaseModel):
+    """Greeting request model."""
+    name: str
+
+
+class GreetingResponse(BaseModel):
+    """Greeting response model."""
+    greeting: str
+
+
+class CalculationRequest(BaseModel):
+    """Calculation request model."""
+    a: int
+    b: int
+
+
+class CalculationResponse(BaseModel):
+    """Calculation response model."""
+    result: int
+    operation: str
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Application lifespan handler."""
+    # Startup logic here
+    print("🚀 Starting {{ project_name }} API...")
+    yield
+    # Shutdown logic here
+    print("🛑 Shutting down {{ project_name }} API...")
+
+
+app = FastAPI(
+    title="{{ project_name }}",
+    description="{{ description }}",
+    version="0.1.0",
+    lifespan=lifespan,
+)
+
+
+@app.get("/", response_model=HealthResponse)
+async def root() -> HealthResponse:
+    """Root endpoint - health check."""
+    from . import __version__
+    return HealthResponse(
+        status="healthy",
+        message="{{ project_name }} API is running!",
+        version=__version__
+    )
+
+
+@app.get("/health", response_model=HealthResponse)
+async def health() -> HealthResponse:
+    """Health check endpoint."""
+    from . import __version__
+    return HealthResponse(
+        status="healthy",
+        message="Service is healthy",
+        version=__version__
+    )
+
+
+@app.post("/greet", response_model=GreetingResponse)
+async def greet(request: GreetingRequest) -> GreetingResponse:
+    """Greet a user."""
+    return GreetingResponse(greeting=f"Hello {request.name}!")
+
+
+@app.post("/calculate/add", response_model=CalculationResponse)
+async def add_numbers(request: CalculationRequest) -> CalculationResponse:
+    """Add two numbers."""
+    result = request.a + request.b
+    return CalculationResponse(result=result, operation="addition")
+
+
+@app.get("/info")
+async def info() -> Dict[str, Any]:
+    """Get application information."""
+    from . import __version__
+    return {
+        "name": "{{ project_name }}",
+        "description": "{{ description }}",
+        "version": __version__,
+        "endpoints": [
+            {"path": "/", "method": "GET", "description": "Health check"},
+            {"path": "/health", "method": "GET", "description": "Health status"},
+            {"path": "/greet", "method": "POST", "description": "Greet user"},
+            {"path": "/calculate/add", "method": "POST", "description": "Add numbers"},
+            {"path": "/info", "method": "GET", "description": "API information"},
+        ]
+    }
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        "{{ package_name }}.main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True
+    )
+{% elif entry_point %}"""Command-line interface for {{ project_name }}."""
+
+import typer
+from rich.console import Console
+from rich.panel import Panel
+
+app = typer.Typer(
+    name="{{ project_name }}",
+    help="{{ description }}",
+    add_completion=False,
+)
+console = Console()
+
+
+@app.command()
+def hello(
+    name: str = typer.Option("World", "--name", "-n", help="Name to greet"),
+    loud: bool = typer.Option(False, "--loud", "-l", help="Shout the greeting"),
+) -> None:
+    """Say hello to someone."""
+    greeting = f"Hello {name}!"
+    if loud:
+        greeting = greeting.upper()
+
+    console.print(Panel.fit(greeting, style="green"))
+
+
+@app.command()
+def info() -> None:
+    """Show information about {{ project_name }}."""
+    from . import __version__
+
+    info_text = f"""[bold blue]{{ project_name }}[/bold blue]
+
+[bold]Version:[/bold] {__version__}
+[bold]Description:[/bold] {{ description }}
+
+[dim]Add your application logic here![/dim]"""
+
+    console.print(Panel(info_text, title="📋 Application Info", expand=False))
+
+
+@app.command()
+def config(
+    show: bool = typer.Option(False, "--show", help="Show current configuration"),
+) -> None:
+    """Manage application configuration."""
+    if show:
+        console.print("[yellow]No configuration file found.[/yellow]")
+        console.print("[dim]Add your configuration logic here![/dim]")
+    else:
+        console.print("[green]Configuration created![/green]")
+        console.print("[dim]Add your configuration setup logic here![/dim]")
+
+
+def main() -> None:
+    """Entry point for the CLI application."""
+    app()
+
+
+if __name__ == "__main__":
+    main()
+{% else %}"""{{ project_name }} library module."""
+
+
+def hello(name: str = "World") -> str:
+    """Return a greeting message.
+
+    Args:
+        name: Name to greet
+
+    Returns:
+        Greeting message
+
+    Example:
+        >>> hello()
+        'Hello World!'
+        >>> hello("Alice")
+        'Hello Alice!'
+    """
+    return f"Hello {name}!"
+
+
+def add_numbers(a: int, b: int) -> int:
+    """Add two numbers together.
+
+    Args:
+        a: First number
+        b: Second number
+
+    Returns:
+        Sum of a and b
+
+    Example:
+        >>> add_numbers(2, 3)
+        5
+    """
+    return a + b
+{% endif %}

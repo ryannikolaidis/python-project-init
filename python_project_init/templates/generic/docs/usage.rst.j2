@@ -1,0 +1,28 @@
+Usage
+=====
+
+{% if entry_point %}
+Command Line
+------------
+
+.. code-block:: bash
+
+    {{ package_name }}
+
+This will run the main application.
+
+{% endif %}
+Python API
+----------
+
+.. code-block:: python
+
+    import {{ package_name }}
+
+    # Example usage
+    {% if not entry_point %}
+    result = {{ package_name }}.hello()
+    print(result)
+    {% else %}
+    # Add your usage examples here
+    {% endif %}

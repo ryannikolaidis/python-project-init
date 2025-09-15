@@ -1,0 +1,195 @@
+# {{ project_name }}
+
+{{ description }}
+
+## Installation
+
+### Development Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/{{ github_username }}/{{ project_name }}.git
+cd {{ project_name }}
+
+# Install dependencies
+make install-dev
+```
+
+### Global Installation{% if entry_point %}
+
+Install {{ package_name }} globally using pipx (recommended):
+
+```bash
+# Build and install globally
+make install-package
+
+# Or manually:
+make build
+pipx install .
+```
+
+After installation, you can use the `{{ project_name }}` command from anywhere.
+
+### Uninstall
+
+```bash
+make uninstall-package
+# Or: pipx uninstall {{ package_name }}
+```{% else %}
+
+This is a Python library. Install it in your project:
+
+```bash
+pip install -e .
+```{% endif %}
+
+## Usage
+
+{% if create_api %}
+### Development Server
+
+```bash
+# Run with hot reload
+uv run uvicorn {{ package_name }}.main:app --reload
+
+# Or run the module directly
+uv run python -m {{ package_name }}.main
+```
+
+### API Endpoints
+
+- **GET /** - Health check and API info
+- **GET /health** - Health status
+- **POST /greet** - Greet a user
+  ```json
+  {"name": "Alice"}
+  ```
+- **POST /calculate/add** - Add two numbers
+  ```json
+  {"a": 5, "b": 3}
+  ```
+- **GET /info** - API information and available endpoints
+
+### Interactive API Documentation
+
+Once running, visit:
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
+
+{% elif entry_point %}
+```bash
+# Show help
+{{ project_name }} --help
+
+# Say hello
+{{ project_name }} hello
+{{ project_name }} hello --name Alice
+{{ project_name }} hello --name Bob --loud
+
+# Show application info
+{{ project_name }} info
+
+# Manage configuration
+{{ project_name }} config
+{{ project_name }} config --show
+```
+{% else %}
+```python
+import {{ package_name }}
+
+# Example usage
+result = {{ package_name }}.hello("World")
+print(result)  # "Hello World!"
+
+sum_result = {{ package_name }}.add_numbers(2, 3)
+print(sum_result)  # 5
+```
+{% endif %}
+
+## Development
+
+### Setup
+
+```bash
+# Install development dependencies
+make install-dev
+
+# Install pre-commit hooks
+uv run pre-commit install
+```
+
+### Common Commands
+
+```bash
+# Run tests
+make test
+
+# Run linting
+make lint
+
+# Fix formatting
+make tidy
+
+# Run all checks
+make check
+
+# Build package
+make build
+
+# Install globally
+make install-package
+
+# Bump version
+make version-dev
+```
+
+### Testing
+
+```bash
+# Run tests with coverage
+make test-cov
+```
+
+{% if create_api %}## Docker
+
+### Production
+
+```bash
+# Build and run single container
+make docker-build
+docker run -p 8000:8000 {{ project_name }}:latest
+```
+
+### Development with Docker Compose
+
+```bash
+# Start all services (API + PostgreSQL + Redis + pgAdmin)
+docker compose up -d
+
+# View logs
+docker compose logs -f api
+
+# Stop all services
+docker compose down
+```
+
+Services available:
+- **API**: http://localhost:8000
+- **pgAdmin**: http://localhost:5050 (admin@{{ project_name }}.com / admin)
+- **PostgreSQL**: localhost:5432
+- **Redis**: localhost:6379
+
+{% else %}## Docker
+
+```bash
+# Build image
+make docker-build
+
+# Run container
+make docker-run
+```
+{% endif %}
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details.
