@@ -2,6 +2,27 @@
 
 {{ description }}
 
+## Features
+
+{% if create_api %}- **FastAPI Web Application** with production-ready setup
+- **Hot-reload development server** (`make run-dev`)
+- **Docker support** with optimized multi-stage builds
+- **Docker Compose** with PostgreSQL, Redis, and pgAdmin
+- **Interactive API documentation** (Swagger UI + ReDoc)
+- **Health checks** and comprehensive logging
+{% elif entry_point %}- **CLI Application** with Typer framework
+- **Rich terminal output** with colors and formatting
+- **Interactive commands** with help and configuration
+- **Global installation** support via pipx
+{% else %}- **Python Library** with modern packaging
+- **Reusable functions** and clean API design
+{% endif %}- **Modern Python tooling** (uv, ruff, black, mypy, pytest)
+- **Pre-commit hooks** for code quality
+- **GitHub Actions** CI/CD workflows
+- **Comprehensive testing** with coverage reports
+- **Version management** with automated bumping
+- **Professional project structure** following best practices
+
 ## Installation
 
 ### Development Installation
@@ -49,7 +70,10 @@ pip install -e .
 ### Development Server
 
 ```bash
-# Run with hot reload
+# Run with hot reload (recommended)
+make run-dev
+
+# Or run uvicorn directly
 uv run uvicorn {{ package_name }}.main:app --reload
 
 # Or run the module directly
@@ -121,7 +145,10 @@ uv run pre-commit install
 ### Common Commands
 
 ```bash
-# Run tests
+{% if create_api %}# Run development server
+make run-dev
+
+{% endif %}# Run tests
 make test
 
 # Run linting
@@ -158,6 +185,9 @@ make test-cov
 # Build and run single container
 make docker-build
 docker run -p 8000:8000 {{ project_name }}:latest
+
+# Or use make target
+make docker-run
 ```
 
 ### Development with Docker Compose
