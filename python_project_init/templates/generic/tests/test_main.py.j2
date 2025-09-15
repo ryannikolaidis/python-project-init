@@ -1,12 +1,9 @@
 """Tests for {{ package_name }}.main module."""
 
-import pytest
-{% if create_api %}
-import pytest_asyncio
+{% if create_api -%}
 from fastapi.testclient import TestClient
 
 from {{ package_name }}.main import app
-
 client = TestClient(app)
 
 
@@ -85,11 +82,10 @@ def test_invalid_calculate_request():
     """Test calculate endpoint with invalid request."""
     response = client.post("/calculate/add", json={"a": "not_a_number", "b": 3})
     assert response.status_code == 422  # Validation error
-{% elif entry_point %}
+{% elif entry_point -%}
 from typer.testing import CliRunner
 
 from {{ package_name }}.main import app
-
 
 runner = CliRunner()
 
@@ -142,7 +138,9 @@ def test_help():
     result = runner.invoke(app, ["--help"])
     assert result.exit_code == 0
     assert "{{ description }}" in result.stdout
-{% else %}
+{% else -%}
+import pytest
+
 from {{ package_name }}.main import hello, add_numbers
 
 

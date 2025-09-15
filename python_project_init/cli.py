@@ -118,7 +118,9 @@ def init(
         raise typer.Exit(1)
 
 
-def collect_project_info(project_name: str | None, force: bool, config_manager: ConfigManager) -> ProjectConfig:
+def collect_project_info(
+    project_name: str | None, force: bool, config_manager: ConfigManager
+) -> ProjectConfig:
     """Collect project information interactively."""
 
     # Get user defaults from config
@@ -171,7 +173,9 @@ def collect_project_info(project_name: str | None, force: bool, config_manager: 
             author_email = None
 
     # Python version
-    python_version = Prompt.ask("Python version", choices=["3.12", "3.11", "3.10"], default=defaults.python_version)
+    python_version = Prompt.ask(
+        "Python version", choices=["3.12", "3.11", "3.10"], default=defaults.python_version
+    )
 
     # Package name (auto-generate from project name)
     suggested_package_name = snake_case(project_name)

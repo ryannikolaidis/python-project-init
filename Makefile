@@ -19,7 +19,7 @@ test-cov: ## Run tests with coverage
 
 lint: ## Run linters
 	uv run ruff check python_project_init tests
-	uv run mypy python_project_init
+	uv run pyright python_project_init
 
 tidy: ## Fix formatting and linting issues
 	uv run ruff format python_project_init tests

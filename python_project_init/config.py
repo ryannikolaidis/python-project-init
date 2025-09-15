@@ -7,7 +7,6 @@
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Optional
 
 import yaml
 
@@ -21,13 +20,13 @@ class UserDefaults:
     github_username: str = "yourusername"
     python_version: str = "3.12"
     entry_point_default: bool = False
-    project_directory: Optional[str] = None
+    project_directory: str | None = None
 
 
 class ConfigManager:
     """Manages configuration from YAML files."""
 
-    def __init__(self, config_path: Optional[Path] = None) -> None:
+    def __init__(self, config_path: Path | None = None) -> None:
         """Initialize config manager.
 
         Args:
@@ -51,22 +50,22 @@ class ConfigManager:
             return UserDefaults()
 
         try:
-            with open(self.config_path, 'r', encoding='utf-8') as f:
+            with open(self.config_path, encoding="utf-8") as f:
                 config_data = yaml.safe_load(f)
 
             if not config_data:
                 return UserDefaults()
 
             # Extract defaults section
-            defaults_data = config_data.get('defaults', {})
+            defaults_data = config_data.get("defaults", {})
 
             return UserDefaults(
-                author_name=defaults_data.get('author_name', 'Your Name'),
-                author_email=defaults_data.get('author_email', 'your.email@example.com'),
-                github_username=defaults_data.get('github_username', 'yourusername'),
-                python_version=defaults_data.get('python_version', '3.12'),
-                entry_point_default=defaults_data.get('entry_point_default', False),
-                project_directory=defaults_data.get('project_directory'),
+                author_name=defaults_data.get("author_name", "Your Name"),
+                author_email=defaults_data.get("author_email", "your.email@example.com"),
+                github_username=defaults_data.get("github_username", "yourusername"),
+                python_version=defaults_data.get("python_version", "3.12"),
+                entry_point_default=defaults_data.get("entry_point_default", False),
+                project_directory=defaults_data.get("project_directory"),
             )
 
         except (yaml.YAMLError, OSError, KeyError) as e:
@@ -79,17 +78,17 @@ class ConfigManager:
         self.config_path.parent.mkdir(parents=True, exist_ok=True)
 
         default_config = {
-            'defaults': {
-                'author_name': 'Ryan Nikolaidis',
-                'author_email': 'ryannikolaidis@gmail.com',
-                'github_username': 'ryannikolaidis',
-                'python_version': '3.12',
-                'entry_point_default': False,
-                'project_directory': '/Users/ryannikolaidis/Development/',
+            "defaults": {
+                "author_name": "Ryan Nikolaidis",
+                "author_email": "ryannikolaidis@gmail.com",
+                "github_username": "ryannikolaidis",
+                "python_version": "3.12",
+                "entry_point_default": False,
+                "project_directory": "/Users/ryannikolaidis/Development/",
             }
         }
 
-        with open(self.config_path, 'w', encoding='utf-8') as f:
+        with open(self.config_path, "w", encoding="utf-8") as f:
             yaml.safe_dump(default_config, f, default_flow_style=False, sort_keys=False)
 
         print(f"Created default config at {self.config_path}")
