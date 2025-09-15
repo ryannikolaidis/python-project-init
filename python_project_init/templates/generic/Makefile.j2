@@ -1,7 +1,7 @@
 {% if create_api -%}
-.PHONY: help install install-dev test lint check tidy version-dev version-release clean run-dev
+.PHONY: help install install-dev test lint check tidy version-dev version-release clean run-dev docs docs-serve
 {% else -%}
-.PHONY: help install install-dev test lint check tidy version-dev version-release clean
+.PHONY: help install install-dev test lint check tidy version-dev version-release clean docs docs-serve
 {% endif -%}
 .DEFAULT_GOAL := help
 
@@ -15,17 +15,17 @@ install: ## Install dependencies
 install-dev: ## Install development dependencies
 	uv sync --all-extras
 
-test: ## Run tests
+test: install-dev ## Run tests (auto-installs dev dependencies)
 	uv run pytest
 
-test-cov: ## Run tests with coverage
+test-cov: install-dev ## Run tests with coverage (auto-installs dev dependencies)
 	uv run pytest --cov={{ package_name }} --cov-report=html --cov-report=term
 
-lint: ## Run linters
+lint: install-dev ## Run linters (auto-installs dev dependencies)
 	uv run ruff check {{ package_name }} tests
 	uv run mypy {{ package_name }}
 
-tidy: ## Fix formatting and linting issues
+tidy: install-dev ## Fix formatting and linting issues (auto-installs dev dependencies)
 	uv run ruff format {{ package_name }} tests
 	uv run ruff check --fix {{ package_name }} tests
 	uv run black {{ package_name }} tests
@@ -76,8 +76,18 @@ clean: ## Clean up build artifacts
 	rm -rf *.egg-info/
 	rm -rf .coverage
 	rm -rf htmlcov/
+	rm -rf docs/_build/
 	find . -type d -name __pycache__ -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
+
+docs: install-dev ## Build Sphinx documentation (auto-installs dev dependencies)
+	cd docs && uv run sphinx-build -b html . _build/html
+	@echo "Documentation built! Open docs/_build/html/index.html in your browser"
+
+docs-serve: docs ## Build and serve documentation locally (auto-installs dev dependencies)
+	cd docs/_build/html && python -m http.server 8080 &
+	@echo "Documentation server running at http://localhost:8080"
+	@echo "Press Ctrl+C to stop the server"
 
 docker-build: ## Build Docker image
 	docker build -t {{ project_name }}:latest .

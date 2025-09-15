@@ -160,6 +160,12 @@ make tidy
 # Run all checks
 make check
 
+# Build documentation
+make docs
+
+# Build and serve docs locally
+make docs-serve
+
 # Build package
 make build
 
@@ -176,6 +182,43 @@ make version-dev
 # Run tests with coverage
 make test-cov
 ```
+
+## Documentation
+
+This project uses [Sphinx](https://www.sphinx-doc.org/) for documentation generation.
+
+### Building Documentation
+
+```bash
+# Build HTML documentation
+make docs
+
+# Build and serve locally (opens in browser at http://localhost:8080)
+make docs-serve
+
+# Clean documentation build files
+make clean
+```
+
+### Editing Documentation
+
+Documentation source files are in the `docs/` directory:
+
+- `docs/index.rst` - Main documentation page
+- `docs/installation.rst` - Installation instructions
+- `docs/usage.rst` - Usage examples and tutorials
+- `docs/api.rst` - Auto-generated API reference
+
+### GitHub Pages Deployment
+
+Documentation is automatically built and deployed to GitHub Pages when you push to the `main` branch. The docs will be available at:
+
+`https://{{ github_username }}.github.io/{{ project_name }}/`
+
+To enable GitHub Pages:
+1. Go to your repository Settings → Pages
+2. Select "GitHub Actions" as the source
+3. Push to main branch to trigger the first build
 
 {% if create_api %}## Docker
 
