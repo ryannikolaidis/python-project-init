@@ -19,13 +19,22 @@
 ## Examples
 
 ```python
+from pathlib import Path
+
 from python_project_init.template_engine import TemplateEngine, ProjectGenerator
 from python_project_init.models import ProjectConfig
 
 config = ProjectConfig(
     project_name="my-project",
+    project_type="python",
+    description="A sample Python project",
+    author_name="Jane Doe",
+    author_email="jane@example.com",
+    github_username="janedoe",
+    target_directory=Path("./my-project"),
+    python_version="3.12",
     package_name="my_project",
-    # ... other fields
+    entry_point=True,
 )
 
 engine = TemplateEngine(template_path)
@@ -45,3 +54,4 @@ generator.generate_project(config)
 ## Change Log
 
 - **v0.1.0**: Initial implementation with recursive directory processing
+- **v0.2.0**: Supports multi-template project types (Python, Bash)

@@ -1,15 +1,15 @@
 # python-project-init
 
-A CLI tool to initialize Python projects from templates with modern tooling and best practices.
+A CLI tool to initialize projects (Python, Bash) from curated templates with modern tooling and best practices.
 
 ## Features
 
-- **Three Project Types**: Library, CLI applications, and FastAPI web applications
+- **Multiple Project Types**: Python libraries/CLIs/APIs and lightweight Bash script projects
 - **Interactive CLI** with rich prompts and YAML configuration support
-- **Modern Python tooling**: uv, ruff, black, mypy, pytest, pre-commit hooks
+- **Modern tooling**: uv, ruff, black, mypy, pytest, shellcheck, shfmt, pre-commit hooks
 - **FastAPI Support**: Production-ready web applications with Docker
 - **Hot-reload development**: `make run-dev` for rapid development
-- **Complete project structure**: tests, docs, CI/CD, Docker support
+- **Complete project structure**: tests, docs, CI/CD, Docker support (Python) and linting workflows (Bash)
 - **Template engine** using Jinja2 for flexible customization
 - **GitHub workflows** for automated testing and building
 - **Docker optimization**: Multi-stage builds with retry logic and security
@@ -29,7 +29,16 @@ ppi init my-awesome-project
 ppi init
 ```
 
+## Project Types
+
+- **Python (default):** Full-featured modern Python project scaffolding
+- **Bash:** Lightweight shell script project with sensible defaults, shellcheck/shfmt pre-commit hooks, and CI linting
+
+Python remains the default choice when running `ppi init` interactively.
+
 ## Generated Project Structure
+
+### Python project (default)
 
 ```
 my-awesome-project/
@@ -49,6 +58,20 @@ my-awesome-project/
 ├── .gitignore
 ├── LICENSE                      # MIT License
 └── README.md
+```
+
+### Bash project
+
+```
+my-awesome-project/
+├── scripts/
+│   └── run.sh                   # Primary executable script
+├── .github/workflows/ci.yml     # Shell linting CI
+├── .pre-commit-config.yaml      # shellcheck + shfmt hooks
+├── Makefile                     # run/lint targets
+├── README.md
+├── LICENSE
+└── .gitignore
 ```
 
 ## CLI Usage
@@ -75,9 +98,12 @@ ppi --help
 The CLI prompts for:
 
 - **Project name**: Used for directories and repository
+- **Project type**: Choose between Python (default) or Bash
 - **Description**: Brief project description
 - **Author details**: Name and email for metadata
-- **Python version**: 3.10, 3.11, or 3.12
+- **Python-specific options** (when selected): Python version, package name, optional CLI/API scaffolding
+- **Bash-specific options** (when selected): Primary script filename and description
+- **GitHub username**: Used for README links and metadata
 - **Package name**: Python module name (auto-generated)
 - **Entry point**: Whether to create a CLI command (Typer-based)
 - **FastAPI web app**: Whether to create a web application

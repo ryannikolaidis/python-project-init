@@ -33,14 +33,17 @@ def sample_config():
     """Create a sample project configuration."""
     return ProjectConfig(
         project_name="test-project",
+        project_type="python",
         description="A test project",
         author_name="Test Author",
         author_email="test@example.com",
+        github_username="testuser",
+        target_directory=Path("/tmp/test-output"),
         python_version="3.12",
         package_name="test_project",
         entry_point=True,
-        github_username="testuser",
-        target_directory=Path("/tmp/test-output"),
+        create_api=False,
+        extra_context={},
     )
 
 
@@ -97,14 +100,17 @@ def test_project_generation(temp_template_dir, sample_config):
     with tempfile.TemporaryDirectory() as tmp_output:
         config = ProjectConfig(
             project_name="test-project",
+            project_type="python",
             description="A test project",
             author_name="Test Author",
             author_email="test@example.com",
+            github_username="testuser",
+            target_directory=Path(tmp_output) / "test-project",
             python_version="3.12",
             package_name="test_project",
             entry_point=True,
-            github_username="testuser",
-            target_directory=Path(tmp_output) / "test-project",
+            create_api=False,
+            extra_context={},
         )
 
         engine = TemplateEngine(temp_template_dir)

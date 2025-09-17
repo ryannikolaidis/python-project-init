@@ -40,9 +40,11 @@ defaults:
   github_username: ryannikolaidis
   python_version: '3.12'
   entry_point_default: false
+  project_type: python
   project_directory: /Users/ryannikolaidis/Development/
 ```
 
 ## Change Log
 
 - **v0.1.0**: Initial implementation with ~/.ppi/config.yaml location
+- **v0.2.0**: Added project type default handling

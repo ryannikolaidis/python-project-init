@@ -1,0 +1,13 @@
+.PHONY: run lint format install-hooks
+
+run:
+	bash scripts/{{ script_name }}
+
+lint:
+	shellcheck scripts/{{ script_name }}
+
+format:
+	shfmt -w scripts/{{ script_name }}
+
+install-hooks:
+	pre-commit install

@@ -5,14 +5,14 @@ build-backend = "hatchling.build"
 [project]
 name = "python-project-init"
 dynamic = ["version"]
-description = "A CLI tool to initialize Python projects from templates"
+description = "A CLI tool to initialize projects (Python, Bash) from templates"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.12"
 authors = [
     { name = "Ryan Nikolaidis" },
 ]
-keywords = ["python", "template", "cli", "project", "initialization"]
+keywords = ["python", "bash", "template", "cli", "project", "initialization"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",

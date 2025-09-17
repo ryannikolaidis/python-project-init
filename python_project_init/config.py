@@ -20,6 +20,7 @@ class UserDefaults:
     github_username: str = "yourusername"
     python_version: str = "3.12"
     entry_point_default: bool = False
+    project_type: str = "python"
     project_directory: str | None = None
 
 
@@ -65,6 +66,7 @@ class ConfigManager:
                 github_username=defaults_data.get("github_username", "yourusername"),
                 python_version=defaults_data.get("python_version", "3.12"),
                 entry_point_default=defaults_data.get("entry_point_default", False),
+                project_type=defaults_data.get("project_type", "python"),
                 project_directory=defaults_data.get("project_directory"),
             )
 
@@ -84,6 +86,7 @@ class ConfigManager:
                 "github_username": "ryannikolaidis",
                 "python_version": "3.12",
                 "entry_point_default": False,
+                "project_type": "python",
                 "project_directory": "/Users/ryannikolaidis/Development/",
             }
         }

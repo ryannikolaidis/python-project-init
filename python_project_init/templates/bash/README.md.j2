@@ -1,0 +1,29 @@
+# {{ project_name }}
+
+{{ description }}
+
+## Script Overview
+
+- `scripts/{{ script_name }}` — {{ script_description }}
+
+## Usage
+
+```bash
+# Ensure script is executable
+chmod +x scripts/{{ script_name }}
+
+# Run the script
+./scripts/{{ script_name }}
+```
+
+## Development
+
+- Keep your scripts in the `scripts/` directory
+- Use `shellcheck` to lint your scripts for common issues
+- Use `shfmt` to keep formatting consistent (see `make format`)
+- Install hooks with `pre-commit install` to run linting automatically before each commit
+- Run `make install-hooks` to configure pre-commit quickly
+
+## License
+
+This project is licensed under the MIT License.

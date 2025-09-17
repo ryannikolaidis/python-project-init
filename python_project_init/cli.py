@@ -1,8 +1,8 @@
-"""CLI interface for python-project-init.
+"""CLI interface for project initialization.
 
 # @interface ProjectInitCLI | stability:experimental | owner:@ryannikolaidis
 # inputs: project_name, template_path, flags | outputs: generated project files
-# purpose: Interactive CLI for initializing Python projects from templates
+# purpose: Interactive CLI for initializing projects from curated templates
 """
 
 import re
@@ -19,8 +19,8 @@ from .models import ProjectConfig
 from .template_engine import ProjectGenerator, TemplateEngine
 
 app = typer.Typer(
-    name="python-project-init",
-    help="Initialize Python projects from templates",
+    name="project-init",
+    help="Initialize projects from templates",
     add_completion=False,
 )
 console = Console()
@@ -64,32 +64,31 @@ def init(
         False, "--force", "-f", help="Overwrite existing directory if it exists"
     ),
 ) -> None:
-    """Initialize a new Python project from a template."""
+    """Initialize a new project from a template."""
 
     # Display welcome message
     console.print()
     console.print(
         Panel.fit(
-            Text("🐍 Python Project Initializer", style="bold blue"),
+            Text("🛠️ Project Initializer", style="bold blue"),
             style="blue",
         )
     )
     console.print()
-
-    # Get template path
-    if template_path is None:
-        # Use built-in generic template
-        template_path = Path(__file__).parent / "templates" / "generic"
-
-    if not template_path.exists():
-        console.print(f"[red]Error: Template path does not exist: {template_path}[/red]")
-        raise typer.Exit(1)
 
     # Initialize configuration manager
     config_manager = ConfigManager(config_path)
 
     # Collect project information interactively
     config = collect_project_info(project_name, force, config_manager)
+
+    # Determine template path based on project type if not provided
+    if template_path is None:
+        template_path = Path(__file__).parent / "templates" / config.project_type
+
+    if not template_path.exists():
+        console.print(f"[red]Error: Template path does not exist: {template_path}[/red]")
+        raise typer.Exit(1)
 
     if dry_run:
         console.print(
@@ -108,10 +107,19 @@ def init(
 
         console.print(f"\n✅ [green]Project '{config.project_name}' created successfully![/green]")
         console.print(f"📁 Location: {config.target_directory}")
+
         console.print("\n🚀 Next steps:")
         console.print(f"   cd {config.project_name}")
-        console.print("   make install-dev")
-        console.print("   uv run pre-commit install")
+
+        if config.project_type == "python":
+            console.print("   make install-dev")
+            console.print("   uv run pre-commit install")
+        elif config.project_type == "bash":
+            script_name = config.extra_context.get("script_name", "run.sh")
+            console.print(f"   chmod +x scripts/{script_name}")
+            console.print("   pre-commit install")
+            console.print("   make lint")
+            console.print(f"   ./scripts/{script_name}")
 
     except Exception as e:
         console.print(f"\n[red]Error creating project: {e}[/red]")
@@ -157,9 +165,17 @@ def collect_project_info(
             console.print("[yellow]Cancelled.[/yellow]")
             raise typer.Exit(0)
 
+    # Project type
+    project_type = Prompt.ask(
+        "Project type",
+        choices=["python", "bash"],
+        default=(defaults.project_type or "python"),
+    )
+
     # Description
     description = Prompt.ask(
-        "Project description", default=f"A Python project called {project_name}"
+        "Project description",
+        default=f"A {project_type.capitalize()} project called {project_name}",
     )
 
     # Author information
@@ -172,35 +188,67 @@ def collect_project_info(
             console.print("[red]Invalid email format.[/red]")
             author_email = None
 
-    # Python version
-    python_version = Prompt.ask(
-        "Python version", choices=["3.12", "3.11", "3.10"], default=defaults.python_version
-    )
+    python_version: str | None = None
+    package_name: str | None = None
+    entry_point = False
+    create_api = False
+    extra_context: dict[str, str] = {}
 
-    # Package name (auto-generate from project name)
-    suggested_package_name = snake_case(project_name)
-    package_name = Prompt.ask("Package name (Python module name)", default=suggested_package_name)
+    if project_type == "python":
+        python_version = Prompt.ask(
+            "Python version", choices=["3.12", "3.11", "3.10"], default=defaults.python_version
+        )
 
-    # Entry point
-    entry_point = Confirm.ask("Create CLI entry point?", default=defaults.entry_point_default)
+        suggested_package_name = snake_case(project_name)
+        package_name = Prompt.ask(
+            "Package name (Python module name)", default=suggested_package_name
+        )
 
-    # API option
-    create_api = Confirm.ask("Create FastAPI web application?", default=False)
+        entry_point = Confirm.ask(
+            "Create CLI entry point?", default=defaults.entry_point_default
+        )
+
+        create_api = Confirm.ask("Create FastAPI web application?", default=False)
+
+    else:
+        script_default = f"{snake_case(project_name)}.sh"
+        script_name = ""
+        while not script_name:
+            user_input = Prompt.ask("Primary script filename", default=script_default).strip()
+            if not user_input:
+                console.print("[red]Script filename cannot be empty.[/red]")
+                continue
+            if "/" in user_input:
+                console.print("[red]Script filename cannot contain '/'.[/red]")
+                continue
+            script_name = user_input if user_input.endswith(".sh") else f"{user_input}.sh"
+
+        script_description = Prompt.ask(
+            "Script description",
+            default=f"Command-line script for {project_name}",
+        )
+
+        extra_context = {
+            "script_name": script_name,
+            "script_description": script_description,
+        }
 
     # GitHub username
     github_username = Prompt.ask("GitHub username/organization", default=defaults.github_username)
 
     return ProjectConfig(
         project_name=project_name,
+        project_type=project_type,
         description=description,
         author_name=author_name,
         author_email=author_email,
+        github_username=github_username,
+        target_directory=target_directory,
         python_version=python_version,
         package_name=package_name,
         entry_point=entry_point,
         create_api=create_api,
-        github_username=github_username,
-        target_directory=target_directory,
+        extra_context=extra_context,
     )
 
 
