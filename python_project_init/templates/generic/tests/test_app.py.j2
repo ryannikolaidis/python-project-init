@@ -1,14 +1,16 @@
-"""Tests for {{ package_name }}.main module."""
+"""Tests for {{ package_name }} modules."""
 
 {% if create_api -%}
 from fastapi.testclient import TestClient
 
-from {{ package_name }}.main import app
+from {{ package_name }}.app import app
+
 client = TestClient(app)
 
 
-def test_root_endpoint():
+def test_root_endpoint() -> None:
     """Test root endpoint."""
+
     response = client.get("/")
     assert response.status_code == 200
     data = response.json()
@@ -17,8 +19,9 @@ def test_root_endpoint():
     assert "version" in data
 
 
-def test_health_endpoint():
+def test_health_endpoint() -> None:
     """Test health endpoint."""
+
     response = client.get("/health")
     assert response.status_code == 200
     data = response.json()
@@ -26,24 +29,27 @@ def test_health_endpoint():
     assert data["message"] == "Service is healthy"
 
 
-def test_greet_endpoint():
+def test_greet_endpoint() -> None:
     """Test greet endpoint."""
+
     response = client.post("/greet", json={"name": "Alice"})
     assert response.status_code == 200
     data = response.json()
     assert data["greeting"] == "Hello Alice!"
 
 
-def test_greet_endpoint_empty_name():
+def test_greet_endpoint_empty_name() -> None:
     """Test greet endpoint with empty name."""
+
     response = client.post("/greet", json={"name": ""})
     assert response.status_code == 200
     data = response.json()
     assert data["greeting"] == "Hello !"
 
 
-def test_calculate_add_endpoint():
+def test_calculate_add_endpoint() -> None:
     """Test calculate add endpoint."""
+
     response = client.post("/calculate/add", json={"a": 5, "b": 3})
     assert response.status_code == 200
     data = response.json()
@@ -51,8 +57,9 @@ def test_calculate_add_endpoint():
     assert data["operation"] == "addition"
 
 
-def test_calculate_add_negative():
+def test_calculate_add_negative() -> None:
     """Test calculate add endpoint with negative numbers."""
+
     response = client.post("/calculate/add", json={"a": -5, "b": 3})
     assert response.status_code == 200
     data = response.json()
@@ -60,8 +67,9 @@ def test_calculate_add_negative():
     assert data["operation"] == "addition"
 
 
-def test_info_endpoint():
+def test_info_endpoint() -> None:
     """Test info endpoint."""
+
     response = client.get("/info")
     assert response.status_code == 200
     data = response.json()
@@ -72,104 +80,156 @@ def test_info_endpoint():
     assert len(data["endpoints"]) > 0
 
 
-def test_invalid_greet_request():
+def test_invalid_greet_request() -> None:
     """Test greet endpoint with invalid request."""
+
     response = client.post("/greet", json={"invalid": "data"})
     assert response.status_code == 422  # Validation error
 
 
-def test_invalid_calculate_request():
+def test_invalid_calculate_request() -> None:
     """Test calculate endpoint with invalid request."""
+
     response = client.post("/calculate/add", json={"a": "not_a_number", "b": 3})
     assert response.status_code == 422  # Validation error
-{% elif entry_point -%}
+{% else -%}
+{% if entry_point -%}
 from typer.testing import CliRunner
 
-from {{ package_name }}.main import app
+from {{ package_name }}.app import (
+    build_greeting,
+    get_application_info,
+    get_config_messages,
+)
+from {{ package_name }}.cli import app
 
 runner = CliRunner()
 
 
-def test_hello_command():
+def test_build_greeting_defaults() -> None:
+    """Application logic returns default greeting."""
+
+    assert build_greeting() == "Hello World!"
+    assert build_greeting(name="Alice") == "Hello Alice!"
+
+
+def test_build_greeting_loud() -> None:
+    """Application logic can shout the greeting."""
+
+    assert build_greeting(name="Bob", loud=True) == "HELLO BOB!"
+
+
+def test_get_application_info() -> None:
+    """Application metadata includes expected fields."""
+
+    metadata = get_application_info()
+    assert metadata["name"] == "{{ project_name }}"
+    assert metadata["description"] == "{{ description }}"
+    assert metadata["version"] == "0.1.0"
+
+
+def test_get_config_messages() -> None:
+    """Configuration helper returns appropriate messages."""
+
+    assert get_config_messages(show=False)[0] == "Configuration created!"
+    assert "logic" in get_config_messages(show=True)[1]
+
+
+def test_hello_command() -> None:
     """Test hello command with default name."""
+
     result = runner.invoke(app, ["hello"])
     assert result.exit_code == 0
     assert "Hello World!" in result.stdout
 
 
-def test_hello_command_with_name():
+def test_hello_command_with_name() -> None:
     """Test hello command with custom name."""
+
     result = runner.invoke(app, ["hello", "--name", "Alice"])
     assert result.exit_code == 0
     assert "Hello Alice!" in result.stdout
 
 
-def test_hello_command_loud():
+def test_hello_command_loud() -> None:
     """Test hello command with loud option."""
+
     result = runner.invoke(app, ["hello", "--name", "Bob", "--loud"])
     assert result.exit_code == 0
     assert "HELLO BOB!" in result.stdout
 
 
-def test_info_command():
+def test_info_command() -> None:
     """Test info command."""
+
     result = runner.invoke(app, ["info"])
     assert result.exit_code == 0
     assert "{{ project_name }}" in result.stdout
     assert "0.1.0" in result.stdout
 
 
-def test_config_command():
+def test_config_command() -> None:
     """Test config command."""
+
     result = runner.invoke(app, ["config"])
     assert result.exit_code == 0
     assert "Configuration created!" in result.stdout
 
 
-def test_config_show():
+def test_config_show() -> None:
     """Test config command with show option."""
+
     result = runner.invoke(app, ["config", "--show"])
     assert result.exit_code == 0
     assert "No configuration file found" in result.stdout
 
 
-def test_help():
+def test_help() -> None:
     """Test help output."""
+
     result = runner.invoke(app, ["--help"])
     assert result.exit_code == 0
     assert "{{ description }}" in result.stdout
 {% else -%}
 import pytest
 
-from {{ package_name }}.main import hello, add_numbers
+from {{ package_name }}.app import add_numbers, hello
 
 
-def test_hello():
+def test_hello() -> None:
     """Test hello function with default name."""
+
     result = hello()
     assert result == "Hello World!"
 
 
-def test_hello_with_name():
+def test_hello_with_name() -> None:
     """Test hello function with custom name."""
+
     result = hello("Alice")
     assert result == "Hello Alice!"
 
 
-def test_add_numbers():
+def test_add_numbers() -> None:
     """Test add_numbers function."""
+
     result = add_numbers(2, 3)
     assert result == 5
 
 
-@pytest.mark.parametrize("a, b, expected", [
-    (0, 0, 0),
-    (1, 1, 2),
-    (-1, 1, 0),
-    (10, -5, 5),
-])
-def test_add_numbers_parametrized(a, b, expected):
+@pytest.mark.parametrize(
+    "a, b, expected",
+    [
+        (0, 0, 0),
+        (1, 1, 2),
+        (-1, 1, 0),
+        (10, -5, 5),
+    ],
+)
+def test_add_numbers_parametrized(a: int, b: int, expected: int) -> None:
     """Test add_numbers function with multiple inputs."""
+
     result = add_numbers(a, b)
     assert result == expected
+{% endif -%}
 {% endif %}

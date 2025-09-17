@@ -153,8 +153,12 @@ class ProjectGenerator:
             elif item.suffix == ".j2":
                 # Process template file
                 content = self.template_engine.render_template(item_relative, variables)
-                # Ensure content ends with newline
-                if content and not content.endswith("\n"):
+                # Skip generating empty files that are disabled via template conditions
+                if not content.strip():
+                    continue
+
+                # Ensure content ends with newline for POSIX compatibility
+                if not content.endswith("\n"):
                     content += "\n"
                 target_path.write_text(content, encoding="utf-8")
 

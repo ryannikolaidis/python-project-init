@@ -10,12 +10,14 @@
 - **Docker Compose** with PostgreSQL, Redis, and pgAdmin
 - **Interactive API documentation** (Swagger UI + ReDoc)
 - **Health checks** and comprehensive logging
-{% elif entry_point %}- **CLI Application** with Typer framework
+{% else %}
+{% if entry_point %}- **CLI Application** with Typer framework
 - **Rich terminal output** with colors and formatting
 - **Interactive commands** with help and configuration
 - **Global installation** support via pipx
 {% else %}- **Python Library** with modern packaging
 - **Reusable functions** and clean API design
+{% endif %}
 {% endif %}- **Modern Python tooling** (uv, ruff, black, mypy, pytest)
 - **Pre-commit hooks** for code quality
 - **GitHub Actions** CI/CD workflows
@@ -74,10 +76,10 @@ pip install -e .
 make run-dev
 
 # Or run uvicorn directly
-uv run uvicorn {{ package_name }}.main:app --reload
+uv run uvicorn {{ package_name }}.app:app --reload
 
 # Or run the module directly
-uv run python -m {{ package_name }}.main
+uv run python -m {{ package_name }}.app
 ```
 
 ### API Endpoints
@@ -100,7 +102,8 @@ Once running, visit:
 - **Swagger UI**: http://localhost:8000/docs
 - **ReDoc**: http://localhost:8000/redoc
 
-{% elif entry_point %}
+{% else %}
+{% if entry_point %}
 ```bash
 # Show help
 {{ project_name }} --help
@@ -119,15 +122,16 @@ Once running, visit:
 ```
 {% else %}
 ```python
-import {{ package_name }}
+from {{ package_name }} import app
 
 # Example usage
-result = {{ package_name }}.hello("World")
+result = app.hello("World")
 print(result)  # "Hello World!"
 
-sum_result = {{ package_name }}.add_numbers(2, 3)
+sum_result = app.add_numbers(2, 3)
 print(sum_result)  # 5
 ```
+{% endif %}
 {% endif %}
 
 ## Development

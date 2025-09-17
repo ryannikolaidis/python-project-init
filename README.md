@@ -35,10 +35,10 @@ ppi init
 my-awesome-project/
 ├── my_awesome_project/          # Main package
 │   ├── __init__.py
-│   └── main.py                  # Entry point (optional)
+│   └── app.py                   # Application module (optional)
 ├── tests/
 │   ├── __init__.py
-│   └── test_main.py
+│   └── test_app.py
 ├── docs/                        # Sphinx documentation
 ├── .github/workflows/ci.yml     # GitHub Actions CI
 ├── pyproject.toml               # Modern Python packaging

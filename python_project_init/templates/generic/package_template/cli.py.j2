@@ -1,0 +1,62 @@
+{% if entry_point and not create_api %}"""Command-line interface for {{ project_name }}."""
+
+import typer
+from rich.console import Console
+from rich.panel import Panel
+
+from .app import build_greeting, get_application_info, get_config_messages
+
+app = typer.Typer(
+    name="{{ project_name }}",
+    help="{{ description | replace('"', '\\"') }}",
+    add_completion=False,
+)
+console = Console()
+
+
+@app.command()
+def hello(
+    name: str = typer.Option("World", "--name", "-n", help="Name to greet"),
+    loud: bool = typer.Option(False, "--loud", "-l", help="Shout the greeting"),
+) -> None:
+    """Say hello to someone."""
+
+    greeting = build_greeting(name=name, loud=loud)
+    console.print(Panel.fit(greeting, style="green"))
+
+
+@app.command()
+def info() -> None:
+    """Show information about {{ project_name }}."""
+
+    metadata = get_application_info()
+    info_text = (
+        f"[bold blue]{metadata['name']}[/bold blue]\n\n"
+        f"[bold]Version:[/bold] {metadata['version']}\n"
+        f"[bold]Description:[/bold] {metadata['description']}\n\n"
+        "[dim]Add your application logic here![/dim]"
+    )
+    console.print(Panel(info_text, title="📋 Application Info", expand=False))
+
+
+@app.command()
+def config(
+    show: bool = typer.Option(False, "--show", help="Show current configuration"),
+) -> None:
+    """Manage application configuration."""
+
+    primary, secondary = get_config_messages(show=show)
+    style = "yellow" if show else "green"
+    console.print(f"[{style}]{primary}[/{style}]")
+    console.print(f"[dim]{secondary}[/dim]")
+
+
+def main() -> None:
+    """Entry point for the CLI application."""
+
+    app()
+
+
+if __name__ == "__main__":
+    main()
+{% endif %}

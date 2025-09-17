@@ -7,8 +7,27 @@ API Reference
 .. automodule:: {{ package_name }}
    :members:
 
-{{ package_name }}.main module
-{{ "-" * (package_name|length + 12) }}
+{% if create_api %}{{ package_name }}.app module
+{{ "-" * (package_name|length + 11) }}
 
-.. automodule:: {{ package_name }}.main
+.. automodule:: {{ package_name }}.app
    :members:
+{% else %}
+{% if entry_point %}{{ package_name }}.cli module
+{{ "-" * (package_name|length + 11) }}
+
+.. automodule:: {{ package_name }}.cli
+   :members:
+
+{{ package_name }}.app module
+{{ "-" * (package_name|length + 11) }}
+
+.. automodule:: {{ package_name }}.app
+   :members:
+{% else %}{{ package_name }}.app module
+{{ "-" * (package_name|length + 11) }}
+
+.. automodule:: {{ package_name }}.app
+   :members:
+{% endif %}
+{% endif %}
