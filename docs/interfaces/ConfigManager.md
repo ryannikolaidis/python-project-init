@@ -2,13 +2,13 @@
 
 - **Stability:** stable
 - **Owner:** @ryannikolaidis
-- **Location:** python_project_init/config.py
-- **Summary:** Manages user configuration and defaults from YAML files stored at ~/.ppi/config.yaml.
+- **Location:** project_init/config.py
+- **Summary:** Manages user configuration and defaults from YAML files stored at ~/.project-init/config.yaml.
 
 ## Inputs/Outputs
 
 **Inputs:**
-- YAML configuration file at ~/.ppi/config.yaml (or custom path)
+- YAML configuration file at ~/.project-init/config.yaml (or custom path)
 - Fallback to built-in defaults if config missing
 
 **Outputs:**
@@ -18,9 +18,9 @@
 ## Examples
 
 ```python
-from python_project_init.config import ConfigManager
+from project_init.config import ConfigManager
 
-# Use default config location (~/.ppi/config.yaml)
+# Use default config location (~/.project-init/config.yaml)
 config_manager = ConfigManager()
 defaults = config_manager.get_defaults()
 
@@ -46,5 +46,5 @@ defaults:
 
 ## Change Log
 
-- **v0.1.0**: Initial implementation with ~/.ppi/config.yaml location
-- **v0.2.0**: Added project type default handling
+- **v0.1.0**: Initial implementation with user-configurable defaults
+- **v0.2.0**: Added project type default handling and moved default path to ~/.project-init/config.yaml

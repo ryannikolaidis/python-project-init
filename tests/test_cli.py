@@ -1,6 +1,6 @@
 """Tests for CLI module."""
 
-from python_project_init.cli import snake_case, validate_email, validate_project_name
+from project_init.cli import snake_case, validate_email, validate_project_name
 
 
 def test_validate_project_name():

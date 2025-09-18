@@ -1,6 +1,6 @@
 # Interface Index
 
-This document links to all public interfaces in the python-project-init codebase.
+This document links to all public interfaces in the project-init codebase.
 
 ## CLI Interfaces
 
@@ -29,5 +29,5 @@ All interfaces are marked in the code with annotations like:
 Use grep to find them:
 
 ```bash
-grep -r "@interface" python_project_init/
+grep -r "@interface" project_init/
 ```

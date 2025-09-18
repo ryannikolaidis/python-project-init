@@ -69,7 +69,7 @@ build: ## Build package for distribution
 	uv build
 
 install-package: build ## Install package globally with pipx
-	pipx install .
+	pipx install . -f
 
 uninstall-package: ## Uninstall package from pipx
 	pipx uninstall {{ project_name }}

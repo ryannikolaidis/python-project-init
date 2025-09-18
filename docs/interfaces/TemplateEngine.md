@@ -2,7 +2,7 @@
 
 - **Stability:** stable
 - **Owner:** @ryannikolaidis
-- **Location:** python_project_init/template_engine.py
+- **Location:** project_init/template_engine.py
 - **Summary:** Jinja2-based template processing engine that renders project files with variable substitution and custom filters.
 
 ## Inputs/Outputs
@@ -19,7 +19,7 @@
 ## Examples
 
 ```python
-from python_project_init.template_engine import TemplateEngine
+from project_init.template_engine import TemplateEngine
 
 engine = TemplateEngine(Path("./templates"))
 

@@ -1,4 +1,4 @@
-"""Configuration management for python-project-init.
+"""Configuration management for project-init.
 
 # @interface ConfigManager | stability:stable | owner:@ryannikolaidis
 # inputs: YAML config files | outputs: default values for CLI prompts
@@ -31,10 +31,10 @@ class ConfigManager:
         """Initialize config manager.
 
         Args:
-            config_path: Path to config file, defaults to ~/.ppi/config.yaml
+            config_path: Path to config file, defaults to ~/.project-init/config.yaml
         """
         if config_path is None:
-            config_path = Path.home() / ".ppi" / "config.yaml"
+            config_path = Path.home() / ".project-init" / "config.yaml"
 
         self.config_path = config_path
         self._defaults = None

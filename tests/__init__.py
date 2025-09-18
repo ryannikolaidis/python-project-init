@@ -1,1 +1,1 @@
-"""Tests for python-project-init."""
+"""Tests for project-init."""

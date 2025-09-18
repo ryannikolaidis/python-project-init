@@ -350,7 +350,7 @@ wheels = [
 ]
 
 [[package]]
-name = "python-project-init"
+name = "project-init"
 source = { editable = "." }
 dependencies = [
     { name = "jinja2" },

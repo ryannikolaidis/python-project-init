@@ -2,7 +2,7 @@
 
 - **Stability:** stable
 - **Owner:** @ryannikolaidis
-- **Location:** python_project_init/template_engine.py
+- **Location:** project_init/template_engine.py
 - **Summary:** Main orchestrator for project generation that processes template directories and creates complete project structures.
 
 ## Inputs/Outputs
@@ -21,8 +21,8 @@
 ```python
 from pathlib import Path
 
-from python_project_init.template_engine import TemplateEngine, ProjectGenerator
-from python_project_init.models import ProjectConfig
+from project_init.template_engine import TemplateEngine, ProjectGenerator
+from project_init.models import ProjectConfig
 
 config = ProjectConfig(
     project_name="my-project",

@@ -264,7 +264,7 @@ def version() -> None:
     """Show version information."""
     from . import __version__
 
-    console.print(f"python-project-init {__version__}")
+    console.print(f"project-init {__version__}")
 
 
 if __name__ == "__main__":

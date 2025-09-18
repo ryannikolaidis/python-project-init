@@ -2,8 +2,8 @@
 
 - **Stability:** experimental
 - **Owner:** @ryannikolaidis
-- **Location:** python_project_init/cli.py
-- **Summary:** Interactive command-line interface for initializing Python projects from templates with rich prompts and validation.
+- **Location:** project_init/cli.py
+- **Summary:** Interactive command-line interface for initializing projects (Python/Bash) from curated templates with rich prompts and validation.
 
 ## Inputs/Outputs
 
@@ -22,28 +22,30 @@
 
 ```bash
 # Interactive mode
-ppi init
+project-init init
 
 # Direct project creation
-ppi init my-awesome-project
+project-init init my-awesome-project
 
 # Custom template
-ppi init --template-path ./custom-templates/
+project-init init --template-path ./custom-templates/
 
 # Preview mode
-ppi init --dry-run my-project
+project-init init --dry-run my-project
+pji init my-project
 ```
 
 ## Interactive Prompts
 
 1. Project name validation (letters, numbers, hyphens, underscores)
-2. Project description
-3. Author name and email (with validation)
-4. Python version selection (3.10, 3.11, 3.12)
-5. Package name (auto-generated, editable)
-6. CLI entry point option
-7. GitHub username for URLs
+2. Project type selection (Python default, Bash optional)
+3. Project description auto-personalized by type
+4. Author name and email (with validation)
+5. Python-specific settings (version, package, CLI/API toggles)
+6. Bash-specific settings (script filename and description)
+7. GitHub username for README/metadata
 
 ## Change Log
 
 - **v0.1.0**: Initial implementation with basic project generation
+- **v0.2.0**: Added multi-project support (Python/Bash) and customizable templates

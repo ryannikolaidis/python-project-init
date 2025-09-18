@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "python-project-init"
+name = "project-init"
 dynamic = ["version"]
 description = "A CLI tool to initialize projects (Python, Bash) from templates"
 readme = "README.md"
@@ -38,18 +38,19 @@ dev = [
 ]
 
 [project.scripts]
-ppi = "python_project_init.cli:app"
+project-init = "project_init.cli:app"
+pji = "project_init.cli:app"
 
 [project.urls]
-Homepage = "https://github.com/ryannikolaidis/python-project-init"
-Repository = "https://github.com/ryannikolaidis/python-project-init"
-Issues = "https://github.com/ryannikolaidis/python-project-init/issues"
+Homepage = "https://github.com/ryannikolaidis/project-init"
+Repository = "https://github.com/ryannikolaidis/project-init"
+Issues = "https://github.com/ryannikolaidis/project-init/issues"
 
 [tool.hatch.version]
-path = "python_project_init/__init__.py"
+path = "project_init/__init__.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["python_project_init"]
+packages = ["project_init"]
 
 [tool.ruff]
 line-length = 100
@@ -60,7 +61,7 @@ select = ["E", "F", "I", "N", "W", "UP"]
 ignore = ["E501"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["python_project_init"]
+known-first-party = ["project_init"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101"]
@@ -88,7 +89,7 @@ reportMissingTypeStubs = false
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
-addopts = "-v --cov=python_project_init --cov-report=term-missing"
+addopts = "-v --cov=project_init --cov-report=term-missing"
 
 [tool.coverage.report]
 exclude_lines = [

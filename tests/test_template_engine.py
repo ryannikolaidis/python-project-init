@@ -5,8 +5,8 @@ from pathlib import Path
 
 import pytest
 
-from python_project_init.models import ProjectConfig
-from python_project_init.template_engine import ProjectGenerator, TemplateEngine
+from project_init.models import ProjectConfig
+from project_init.template_engine import ProjectGenerator, TemplateEngine
 
 
 @pytest.fixture

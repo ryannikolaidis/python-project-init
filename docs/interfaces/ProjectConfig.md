@@ -2,7 +2,7 @@
 
 - **Stability:** stable
 - **Owner:** @ryannikolaidis
-- **Location:** python_project_init/models.py
+- **Location:** project_init/models.py
 - **Summary:** Data structure that holds all project configuration and metadata, with conversion to template variables.
 
 ## Inputs/Outputs
@@ -17,7 +17,7 @@
 ## Examples
 
 ```python
-from python_project_init.models import ProjectConfig
+from project_init.models import ProjectConfig
 from pathlib import Path
 
 config = ProjectConfig(

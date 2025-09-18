@@ -1,4 +1,4 @@
-# python-project-init
+# project-init
 
 A CLI tool to initialize projects (Python, Bash) from curated templates with modern tooling and best practices.
 
@@ -18,23 +18,25 @@ A CLI tool to initialize projects (Python, Bash) from curated templates with mod
 
 ```bash
 # Install the tool
-git clone https://github.com/ryannikolaidis/python-project-init.git
-cd python-project-init
+git clone https://github.com/ryannikolaidis/project-init.git
+cd project-init
 make install-dev
 
 # Initialize a new project
-ppi init my-awesome-project
+project-init init my-awesome-project
 
 # Or run interactively
-ppi init
+project-init init
 ```
+
+> Tip: A legacy `pji` entry point remains available for backwards compatibility.
 
 ## Project Types
 
 - **Python (default):** Full-featured modern Python project scaffolding
 - **Bash:** Lightweight shell script project with sensible defaults, shellcheck/shfmt pre-commit hooks, and CI linting
 
-Python remains the default choice when running `ppi init` interactively.
+Python remains the default choice when running `project-init init` interactively.
 
 ## Generated Project Structure
 
@@ -78,19 +80,19 @@ my-awesome-project/
 
 ```bash
 # Basic usage
-ppi init [PROJECT_NAME]
+project-init init [PROJECT_NAME]
 
 # With custom template
-ppi init --template-path ./my-templates/
+project-init init --template-path ./my-templates/
 
 # Preview without creating files
-ppi init --dry-run
+project-init init --dry-run
 
 # Force overwrite existing directory
-ppi init --force
+project-init init --force
 
 # Show help
-ppi --help
+project-init --help
 ```
 
 ## Configuration Options
@@ -111,7 +113,7 @@ The CLI prompts for:
 
 ### Configuration File
 
-Save defaults in `~/.ppi/config.yaml`:
+Save defaults in `~/.project-init/config.yaml`:
 
 ```yaml
 author_name: "Your Name"

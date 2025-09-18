@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from python_project_init.models import ProjectConfig
+from project_init.models import ProjectConfig
 
 
 def test_project_config_creation():
