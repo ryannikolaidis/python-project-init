@@ -50,10 +50,10 @@ Repository = "https://github.com/{{ github_username }}/{{ project_name }}"
 Issues = "https://github.com/{{ github_username }}/{{ project_name }}/issues"
 
 [tool.hatch.version]
-path = "{{ package_name }}/__init__.py"
+path = "src/{{ package_name }}/__init__.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["{{ package_name }}"]
+packages = ["src/{{ package_name }}"]
 
 [tool.ruff]
 line-length = 100
@@ -92,7 +92,7 @@ reportMissingTypeStubs = false
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
-addopts = "-v --cov={{ package_name }} --cov-report=term-missing"
+addopts = "-v --cov=src/{{ package_name }} --cov-report=term-missing"
 
 [tool.coverage.report]
 exclude_lines = [

@@ -19,7 +19,9 @@ def temp_template_dir():
         (template_dir / "README.md.j2").write_text("# {{ project_name }}\n{{ description }}")
         (template_dir / "{{package_name}}.py.j2").write_text("# Package: {{ package_name }}")
 
-        package_dir = template_dir / "package_template"
+        src_dir = template_dir / "src"
+        src_dir.mkdir()
+        package_dir = src_dir / "{{ package_name }}"
         package_dir.mkdir()
         (package_dir / "__init__.py.j2").write_text(
             '"""{{ description }}"""\n__version__ = "0.1.0"'
@@ -122,12 +124,12 @@ def test_project_generation(temp_template_dir, sample_config):
         assert target_dir.exists()
         assert (target_dir / "README.md").exists()
         assert (target_dir / "test_project.py").exists()
-        assert (target_dir / "test_project" / "__init__.py").exists()
+        assert (target_dir / "src" / "test_project" / "__init__.py").exists()
 
         # Check content
         readme_content = (target_dir / "README.md").read_text()
         assert "# test-project" in readme_content
         assert "A test project" in readme_content
 
-        init_content = (target_dir / "test_project" / "__init__.py").read_text()
+        init_content = (target_dir / "src" / "test_project" / "__init__.py").read_text()
         assert '"""A test project"""' in init_content

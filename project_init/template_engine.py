@@ -141,11 +141,6 @@ class ProjectGenerator:
             target_path = target_dir / processed_name
 
             if item.is_dir():
-                # Handle special directory names that need processing
-                if item.name == "package_template":
-                    processed_name = variables["package_name"]
-                    target_path = target_dir / processed_name
-
                 # Create directory and process contents
                 target_path.mkdir(parents=True, exist_ok=True)
                 self._process_directory(item, target_path, variables, item_relative)
